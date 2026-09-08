@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Bug Test Project</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Тестовый проект FastAPI</h1>
+        <p>Нажми кнопку — сервер выполнит действие (и упадёт с ошибкой, пока не применён патч).</p>
+
+        <button id="actionBtn">Нажми меня</button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('actionBtn');
+        const resultBox = document.getElementById('result');
+
+        btn.addEventListener('click', async () => {
+            resultBox.className = 'result';
+            resultBox.textContent = 'Отправляю запрос...';
+
+            try {
+                const response = await fetch('/api/action', { method: 'POST' });
+
+                if (!response.ok) {
+                    const text = await response.text();
+                    resultBox.classList.add('error');
+                    resultBox.textContent =
+                        `Ошибка сервера (HTTP ${response.status}):\n` + text;
+                    return;
+                }
+
+                const json = await response.json();
+                resultBox.classList.add('success');
+                resultBox.textContent =
+                    `Успех! count = ${json.count}, result = ${json.result}`;
+            } catch (err) {
+                resultBox.classList.add('error');
+                resultBox.textContent = 'Ошибка запроса: ' + err;
+            }
+        });
+    </script>
+</body>
+</html>

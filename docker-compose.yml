@@ -1,0 +1,23 @@
+services:
+  bug-test-project:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: fixops-test-app
+
+    restart: unless-stopped
+
+    ports:
+      - "8000:8000"
+
+    # Метаданные для FixOps.
+    # По ним FixOps понимает, что этот контейнер нужно
+    # отслеживать и с каким исходным проектом он связан.
+    labels:
+      fixops.enabled: "true"
+      fixops.project: "bug-test-project"
+      fixops.project_path: "/projects/bug-test-project"
+
+    volumes:
+      - .:/app:ro
