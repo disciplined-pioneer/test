@@ -46,12 +46,6 @@ def index(request: Request):
 def action():
     """
     Эндпоинт, вызываемый нажатием кнопки на странице.
-
-    # BUG: намеренная ошибка!
-    Ниже мы обращаемся к ключу "total" в словаре data, которого
-    там не существует (в словаре есть только ключ "count").
-    Это гарантированно вызовет KeyError при каждом нажатии кнопки,
-    и FastAPI ответит клиенту кодом 500 Internal Server Error.
     """
     log = get_logger(event="action.execute", current_count=data["count"])
     log.info("Processing action request")
